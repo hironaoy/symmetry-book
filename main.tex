@@ -1,0 +1,104 @@
+\documentclass{article}
+\usepackage{appendix}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{graphics}
+\usepackage[margin = 25mm]{geometry}
+\usepackage{mathrsfs, mathtools}
+\usepackage{amsmath, amsfonts, amsthm, amssymb}
+\usepackage{bm}
+\usepackage{physics}
+\usepackage{tensor}
+\usepackage{comment}
+\usepackage{etoolbox}
+\usepackage{tikz-cd}
+\usepackage{fancyhdr}
+\usepackage{slashed}
+
+%% \usepackage{lxfonts}
+
+\theoremstyle{definition}
+\newtheorem{theorem}{theorem}[section]
+\newtheorem{definition}{Definition}[section]
+\newtheorem{proposition}{Proposition}[section]
+
+\numberwithin{equation}{section}
+\renewcommand{\baselinestretch}{1.3}
+\renewcommand{\mapsto}{\longmapsto}
+
+\renewcommand{\appendixname}{Appendix}
+\usepackage[colorlinks=true, linkcolor=black, urlcolor=blue, citecolor=blue]
+           {hyperref}
+\usepackage{ulem}
+
+\usepackage{titlesec}
+\titleformat{\section}
+            [hang]
+            {\bfseries}
+            {\thesection}
+            {1em}
+            {}
+\titleformat{\subsection}
+            [hang]
+            {\bfseries}
+            {\thesubsection}
+            {1em}
+            {}
+
+
+\newcommand{\diag}{\mathrm{diag}\,}
+\newcommand{\st}{\quad \mathrm{s.t.} \quad}
+\newcommand{\ob}{\mathrm{Ob}\,}
+
+% \pagestyle{fancy}
+% \fancyhead[L]{\thepage}
+% \fancyhead[R]{Topology \& Physics}
+% \fancyfoot{}
+% \renewcommand{\headrulewidth}{0pt}
+
+\title{{\bf Topology \& Physics}}
+\author{HIRONAO YAMATO}
+\date{}
+
+\newcounter{defcount}
+\setcounter{defcount}{1}
+\renewenvironment{definition}{
+  \par
+  \vspace{2mm}
+  \noindent
+  \uline{Definition \thesection.\thedefcount}
+}{
+  \stepcounter{defcount}
+  \par
+  \vspace{2mm}
+  \aftergroup\noindent\ignorespacesafterend
+}
+
+\newcounter{propcount}
+\setcounter{propcount}{1}
+\renewenvironment{proposition}{
+  \par
+  \vspace{2mm}
+  \noindent
+  \uline{Proposition \thesection.\thepropcount}
+}{
+  \stepcounter{propcount}
+  \par
+  \vspace{2mm}
+  \aftergroup\noindent\ignorespacesafterend
+}
+
+\newenvironment{example}{
+  \par
+  \vspace{2mm}
+  \noindent
+  \uline{Example}
+}{
+  \par
+  \vspace{2mm}
+  \aftergroup\noindent\ignorespacesafterend
+}
+
+\begin{document}
+\tableofcontents
+
+\end{document}
