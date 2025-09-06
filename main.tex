@@ -26,8 +26,7 @@
 \renewcommand{\mapsto}{\longmapsto}
 
 \renewcommand{\appendixname}{Appendix}
-\usepackage[colorlinks=true, linkcolor=black, urlcolor=blue, citecolor=blue]
-           {hyperref}
+\usepackage[colorlinks=false, linkcolor=black, urlcolor=blue, citecolor=blue]{hyperref}
 \usepackage{ulem}
 
 \usepackage{titlesec}
@@ -100,5 +99,88 @@
 
 \begin{document}
 \tableofcontents
+
+\section{Mathmatical preparations}
+We begin by estabilishing the mathematical framework. In dealing with symmetries, higher-form symmetries in particular, differential forms are a very convenient tool. First we will introduce differential forms and in relation to that, we will introduce de Rham cohomology groups.
+
+\subsection{Differential forms}
+We will introduce differential forms in a very intuitive way, sacrificing the mathematical rigor. The most part of this section are adapted from \cite{Hidaka}.
+
+\subsubsection{Introduction: Differential forms in 2 dimensional Euclid space}
+Here we are dealing with a 2 dimensional Euclid space $M$. And we consider a integral of a vector field $(a_x(x, y), a_y(x, y))$ on a curve $\gamma(t) = (x(t), y(t))$. Here $t \in [0, 1]$. In order to define the integral we first introduce a \textit{1-form} $\omega$:
+\begin{align}
+  \omega := a_x(x, y) \dd x + a_y(x, y) \dd y.
+\end{align}
+Then we define the integral as follows.
+\begin{align}
+  \int_\gamma \omega :=
+  \int_0^1 \dd t \, \qty{a_x(x(t), y(t)) \dv{x(t)}{t} + a_y(x(t), y(t)) \dv{y(t)}{t}}.
+\end{align}
+In the case that $\omega$ is the total derivative, which means that $a_x(x, y) = \partial_x f(x,y)$ and $a_y(x, y) = \partial_y f(x,y)$ with $^\exists f(x, y)$, we write
+\begin{align}
+  \int_\gamma \omega = \int_\gamma \dd f = f(\gamma(1)) - f(\gamma(0)). \label{1-dim-stokes-lhs}
+\end{align}
+
+Next, we introduce $\partial \gamma := \gamma(1) - \gamma(0)$. And we also define a integral
+\begin{align}
+  \int_{\partial \gamma} f := f(\gamma(1)) - f(\gamma(0)). \label{1-dim-stokes-rhs}
+\end{align}
+Combining \eqref{1-dim-stokes-lhs} and \eqref{1-dim-stokes-rhs}, we get
+\begin{align}
+  \int_\gamma \dd f = \int_{\partial \gamma} f.
+\end{align}
+This is the 1 dimensional version of Stokes's theorem.
+
+Next, we introduce a \textit{2-form} $\dd \omega$ as
+\begin{align}
+  \dd \omega := \partial_x a_y(x, y) \dd x \wedge \dd y + \partial_y a_x(x, y) \dd y \wedge \dd x.
+\end{align}
+Here, we introduced the wedge product $\cdot \wedge \cdot$
+\begin{align}
+  \dd x \wedge \dd y = - \dd y \wedge \dd x.
+\end{align}
+In the case of $\omega = \dd f$, we get
+\begin{align}
+  \dd \omega =
+  \partial_x \partial_y f(x,y) \dd x \wedge \dd y + \partial_y \partial_x f(x,y) \dd y \wedge \dd x = 0.
+\end{align}
+
+\subsubsection{Generalization: Differential forms in $D$ dimensional Euclid space}
+Now we generalize the properties we got from the 2 dimensional case to $D$ dimensional case.
+\begin{definition}
+  We define the wedge product $\cdot \wedge \cdot$ as 
+  \begin{align}
+    \dd x^\mu \wedge \dd x^\nu = - \dd x^\nu \wedge \dd x^\mu.
+  \end{align}
+  Introducing the associativity, we generalize this to the case of more than two terms.
+  \begin{align}
+    \dd x^\mu \wedge \dd x^\nu \wedge \dd x^\rho = - \dd x^\mu \wedge \dd x^\rho \wedge \dd x^\nu
+                                                 = - \dd x^\nu \wedge \dd x^\mu \wedge \dd x^\rho.
+  \end{align}
+\end{definition}
+\begin{definition}
+  We define a $p$\textit{-form} as
+  \begin{align}
+    X := \frac{1}{p!} X_{\mu_1 \cdots \mu_p} \dd x^{\mu_1} \wedge \cdots \wedge \dd x^{\mu_p}.
+  \end{align}
+  And we write the entire set of $p$-form as $\varOmega^p(M)$.
+\end{definition}
+\begin{definition}
+  We define the \textit{exterior derivative} as
+  \begin{align}
+    \dd : \varOmega^p(M) \longrightarrow \varOmega^{p+1}(M); \quad
+    \frac{1}{p!} X_{\mu_1 \cdots \mu_p} \dd x^{\mu_1} \wedge \cdots \wedge \dd x^{\mu_p}
+    \mapsto \frac{1}{p!}\partial_\nu X_{\mu_1\cdots\mu_p} \dd x^\nu \wedge \dd x^{\mu_1} \wedge \cdots \wedge \dd x^{\mu_p}.
+  \end{align}
+\end{definition}
+
+
+\subsection{de Rham cohomology groups}
+
+\begin{thebibliography}{9}
+\bibitem{Hidaka} Yoshimasa Hidaka,
+  \href{https://ribf.riken.jp/~hidaka/yh/slide/hidaka_higher_form.pdf}
+       {\textit{Introduction to Higher Symmetries}}.
+\end{thebibliography}
 
 \end{document}
