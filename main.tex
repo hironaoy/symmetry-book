@@ -1,4 +1,4 @@
-\documentclass{jarticle}
+\documentclass{article}
 \usepackage{appendix}
 \usepackage{graphicx} % Required for inserting images
 \usepackage{graphics}
@@ -22,7 +22,7 @@
 \newtheorem{proposition}{Proposition}[section]
 
 \numberwithin{equation}{section}
-\renewcommand{\baselinestretch}{1.1}
+\renewcommand{\baselinestretch}{1.3}
 \renewcommand{\mapsto}{\longmapsto}
 
 \renewcommand{\appendixname}{Appendix}
@@ -48,7 +48,7 @@
 \newcommand{\st}{\quad \mathrm{s.t.} \quad}
 \newcommand{\ob}{\mathrm{Ob}\,}
 
-\title{{\bf 研究日記：一般化対称性とその周辺}}
+\title{{\bf Notes: generalised symmetries \& related topics}}
 \author{大阪大学大学院理学研究科物理学専攻　大和 寛尚}
 \date{}
 
@@ -95,30 +95,17 @@
 \maketitle
 \tableofcontents
 
-\section{高次形式対称性の定義}
-このセクションの内容は主に以下の文献に依拠する。
+\section{Defining higher-form symmetries}
+Most part of this section are adopted from the reviews below.
 \begin{enumerate}
 \item 日高 義将，高次対称性入門
 \item 日高 義将，対称性の自発的破れ入門
 \end{enumerate}
-\subsection{従来の対称性からの出発}
-具体的な例から出発することにする。いま、$D = d + 1$次元自由フェルミオン系を考える。作用$S$は次で与えられる。
+
+\subsection{Starting from the conventional symmetries}
+Let us start by introducing another standpoint of seeing the conventional symmetries. We start with an example of a free fermionic system. The action of the system is given as shown below.
 \begin{align}
-  S[\psi] = -\int_{\mathscr{M}} \dd^D x \, \bar{\psi}(x)\qty(\gamma^\mu\partial_\mu + m) \psi(x)
+  S[\psi] = \int_{M} \dd^d x\, \bar{\psi}(x) \qty(\gamma^\mu\partial_\mu - m) \psi(x).
 \end{align}
-ただし、$\psi(x)$はディラック場、$\bar{\psi}(x) = i\psi^\dagger(x)\gamma^0$であり、$\mathscr{M} = \mathbb{R} \times \mathbb{R}^d$はミンコフスキー計量をもつ時空多様体である。
-
-この系において$U(1)$対称性変換のネーター・カレント$j^\mu$と対応するネーター・チャージ$Q$を計算すると
-\begin{align}
-  j^\mu(x) = -i\bar{\psi}(x)\gamma^\mu\psi(x), \quad Q(x^0) = -i\int_{\mathbb{R}^d} \dd^d x\, \bar{\psi}(x)\gamma^0 \psi(x)
-\end{align}
-である。$Q$は$U(1)$変換の生成子のヒルベルト空間上の表現である。つまり、次が成り立つ。
-\begin{align}
-  e^{i\theta Q(x^0)} \psi(x) e^{-i\theta Q(x^0)} = e^{i\theta} \psi(x), \quad
-  \qty[iQ(x^0), \psi(x)] = e^{i\theta} \psi(x).
-\end{align}
-
-
-\section{$U(1)$ゲージ理論における高次形式対称性}
-
+Here, $\psi(x)$ is a spinor field, which is a 
 \end{document}
