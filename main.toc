@@ -1,2 +1,9 @@
-\contentsline {section}{\numberline {1}Defining higher-form symmetries}{1}{section.1}%
-\contentsline {subsection}{\numberline {1.1}Starting from the conventional symmetries}{1}{subsection.1.1}%
+\contentsline {section}{\numberline {1}Foundations}{1}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Conventional symmetries *}{1}{subsection.1.1}%
+\contentsline {subsubsection}{\numberline {1.1.1}Schwinger-Dyson equation \& conversation laws}{1}{subsubsection.1.1.1}%
+\contentsline {subsubsection}{\numberline {1.1.2}Reformulation in the language of differential forms}{4}{subsubsection.1.1.2}%
+\contentsline {subsubsection}{\numberline {1.1.3}New perspective on symmetries}{6}{subsubsection.1.1.3}%
+\contentsline {subsection}{\numberline {1.2}Definition of higher-form symmetries}{6}{subsection.1.2}%
+\contentsline {subsubsection}{\numberline {1.2.1}Higher gauge theory}{7}{subsubsection.1.2.1}%
+\contentsline {section}{\numberline {2}Applications}{7}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Ginzburg-Landau theory *}{7}{subsection.2.1}%
