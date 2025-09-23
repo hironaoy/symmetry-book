@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass[dvipdfmx]{article}
 \usepackage{appendix}
 \usepackage{graphicx} % Required for inserting images
 \usepackage{graphics}
@@ -12,6 +12,7 @@
 \usepackage{etoolbox}
 \usepackage{tikz-cd}
 \usepackage{fancyhdr}
+\usepackage[most]{tcolorbox}
 \usepackage{slashed}
 
 %% \usepackage{lxfonts}
@@ -28,6 +29,7 @@
 \newtheorem{remark}{Remark}[section]
 \newtheorem{observationph}{Observation$^{(\mathrm{ph})}$}[section]
 \newtheorem{observation}{Observation}[section]
+\newtheorem{statement}{Statement}[section]
 
 \numberwithin{equation}{section}
 \renewcommand{\baselinestretch}{1.3}
@@ -64,6 +66,37 @@
 \newcommand{\del}{\partial_\mu}
 \newcommand{\lag}{\mathscr{L}}
 \newcommand{\link}{\mathrm{Link}}
+\newcommand{\hodge}{\hspace{-0.5mm}*\hspace{-1mm}}
+
+\newenvironment{stmt}{
+  \begin{tcolorbox}[colframe=white, arc=0mm, colback=gray!25]
+    \begin{statement}
+    }{
+    \end{statement}
+  \end{tcolorbox}
+}
+
+\newenvironment{obsv}{
+  \begin{tcolorbox}[colframe=white, arc=0mm, colback=gray!25]
+    \begin{observation}
+    }{
+    \end{observation}
+  \end{tcolorbox}
+}
+
+\newenvironment{defn}{
+  \begin{tcolorbox}[colframe=white, arc=0mm, colback=gray!25]
+    \begin{definitionph}
+    }{
+    \end{definitionph}
+  \end{tcolorbox}
+}
+
+\newenvironment{ex}[1]{
+  \underline{#1}
+}{
+  
+}
 
 \title{{\large {\bf Notes for master's thesis}}\\{\bf Foundations \& applications of generalised symmetries}}
 \author{大阪大学大学院理学研究科物理学専攻　大和 寛尚}
@@ -76,345 +109,409 @@
 \footnote{The sections with asterisk `` * '' are materials that is not directly related to generalised symmetries but supplemental.}
 
 \section{Foundations}
-\subsection{Conventional symmetries *}
-Most parts of this section are adopted from the matirials below.
-\begin{enumerate}
-\item [\cite{Peskin:1995ev}]
-M.~E.~Peskin and D.~V.~Schroeder,
-``An Introduction to quantum field theory''
-\item [\cite{Srednicki:2007qs}]
-M.~Srednicki,
-``Quantum field theory''
-\item [\cite{Gomes:2023ahz}]
-P.~R.~S.~Gomes,
-``An introduction to higher-form symmetries'', Section 3
-\end{enumerate}
-
-\subsubsection{Schwinger-Dyson equation \& conversation laws}
-\begin{propositionph}
-  We have the following relation, which is well-known as Schwinger-Dyson equation.
-  \begin{align}
-    \ev{\frac{\partial S[\varphi]}{\partial \varphi(x)} \varphi(x_1) \cdots \varphi(x_n)} = i \sum_{i = 1}^{n} \ev{\varphi(x_1) \cdots \delta^{(D)}(x - x_i) \cdots \varphi(x_n)}.
-  \end{align}  
-\end{propositionph}
-\begin{proof}
-  First of all, we prove the general relation
-  \begin{align}
-    \int \mathscr{D} \varphi \, \frac{\delta}{\delta \varphi(x)} \qty(F[\varphi] e^{iS[\varphi]}) = 0.
-  \end{align}
-  We start from the obvious relation
-  \begin{align}
-    \int \mathscr{D} \varphi \, F[\varphi] e^{iS[\varphi]} = \int \mathscr{D} \varphi' \, F[\varphi'] e^{iS[\varphi']},
-  \end{align}
-  which is just a renaming of a dummy variable of the integration. Now we perform a change of variables $\varphi'(x) \mapsto \varphi(x) + \varepsilon(x)$. Then we have
-  \begin{align}
-    \int \mathscr{D}\varphi \, F[\varphi] e^{iS[\varphi]}
-    &= \fivarphi F[\varphi + \varepsilon]e^{iS[\varphi + \varepsilon]} \notag \\
-    &= \fivarphi \qty{F[\varphi] + \intst \frac{\delta F[\varphi]}{\delta \varphi(x)} \varepsilon(x)}
-      \exp\qty{iS[\varphi] + i \intst \frac{\delta S[\varphi]}{\delta \varphi(x)} \varepsilon(x)} \notag \\
-    &= \fivarphi \qty{F[\varphi] + \intst \frac{\delta F[\varphi]}{\delta \varphi(x)} \varepsilon(x)}
-      \qty{1 + i\intst \frac{\delta S[\varphi]}{\delta \varphi(x)}\varepsilon(x)}e^{iS[\varphi]} \notag \\
-    &= \fivarphi F[\varphi] e^{iS[\varphi]} + \fivarphi \intst
-      \qty{\frac{\delta F[\varphi]}{\delta\varphi(x)} e^{iS[\varphi]} + F[\varphi] i\frac{\delta S[\varphi]}{\delta \varphi(x)} e^{iS[\varphi]}}\varepsilon(x),
-      \quad ^\forall \varepsilon(x),
-  \end{align}
-  which leads us to the identity
-  \begin{align}
-    \fivarphi \qty{\frac{\delta F[\varphi]}{\delta\varphi(x)} e^{iS[\varphi]} + F[\varphi] i\frac{\delta S[\varphi]}{\delta \varphi(x)} e^{iS[\varphi]}} = 0.
-  \end{align}
-  Now, by substituting $F[\varphi]$ with $\varphi(x_1) \cdots \varphi(x_n)$ we get
-  \begin{align}
-    i\fivarphi \frac{\delta S[\varphi]}{\delta\varphi(x)}  \varphi(x_1) \cdots \varphi(x_n) e^{iS[\varphi]}
-    = - \sum_{i = 1}^{n} \fivarphi \varphi(x_1) \cdots \delta^{(D)}(x - x_i) \cdots \varphi(x_n) e^{iS[\varphi]},
-  \end{align}
-  which we simply denote
-  \begin{align}
-    \ev{\frac{\delta S[\varphi]}{\delta\varphi(x)}  \varphi(x_1) \cdots \varphi(x_n)}
-    = i \sum_{i = 1}^{n} \ev{\varphi(x_1) \cdots \delta^{(D)}(x - x_i) \cdots \varphi(x_n)}.
-  \end{align}
-\end{proof}
-
-\begin{remark}
-  Schwinger-Dyson equation is the generalisation of Ward-Takahashi identity.
-\end{remark}
-
-\begin{propositionph}
-  We have following relation, which is a correlation function representation of the conversation law of Noether current.
-  \begin{align}
-    \ev{\qty{\del j^\mu(x)} \varphi_{a_1}(x_1) \cdots \varphi_{a_n}(x_n)}
-    = -i\sum_{i = 0}^{n} \ev{\varphi_{a_1}(x_1) \cdots \delta^{(D)}(x - x_i) \delta \varphi_{a_i}(x_i) \cdots \varphi_{a_n}(x_n)}. \label{noether-takahashi-id}
-  \end{align}
-\end{propositionph}
-\begin{proof}
-  Now, we consider the transformation
-  \begin{align}
-    \varphi_a(x) \mapsto \varphi_a'(x) = \varphi_a(x) + \delta_{\varepsilon(x)} \varphi_a(x) = \varphi_a(x) + \varepsilon(x) g_a(x).
-  \end{align}
-  We first prove the relation
-  \begin{align}
-    \delta_{\varepsilon(x)} S[\varphi] = - \intst \varepsilon(x) \del \qty{\sum_{a = 1}^{N} g_a(x) \frac{\partial \lag}{\partial(\partial_\mu \varphi_a(x))} - K^\mu[\varphi]}
-    = - \intst \varepsilon(x) \del j^\mu(x)
-  \end{align}
-  where we defined $j^\mu(x)$ as
-  \begin{align}
-    j^\mu(x) = \sum_{a = 1}^{N} g_a(x) \frac{\partial \lag}{\partial(\partial_\mu \varphi_a(x))} - K^\mu[\varphi].
-  \end{align}
-  The direct calculation of $\delta_{\varepsilon(x)} S[\varphi]$ is as follows.
-  \begin{align}
-    \delta_{\varepsilon(x)} S[\varphi]
-    &= \intst \delta_{\varepsilon(x)} \lag[\varphi, \del \varphi]
-     = \intst \qty{\lag[\varphi(x) + \varepsilon(x)\varphi(x), \del \qty{\varphi(x) + \varepsilon(x)g(x)}] - \lag[\varphi(x), \del \varphi(x)]} \notag \\
-    &= \intst \qty{\lag[\varphi(x) + \varepsilon(x)\varphi(x), \del \varphi(x) + \del \varepsilon(x) g(x) + \varepsilon(x) \del g(x)] - \lag[\varphi(x), \del \varphi(x)]} \notag \\
-    &= \intst \qty{\varepsilon(x)\sum_{a = 1}^{N}g_a(x) \pdv{\lag}{\varphi_a(x)} + \varepsilon(x)\sum_{a = 1}^{N}\del g_a(x)\pdv{\lag}{(\del \varphi_a(x))}
-      + \del \varepsilon(x) \sum_{a = 1}^{N} g_a(x) \pdv{\lag}{(\del\varphi_a(x))}} \notag \\
-    &= \intst \varepsilon(x) \del K^\mu(x) + \intst \del \varepsilon(x) \sum_{a = 1}^{N} g_a(x) \pdv{\lag}{(\del\varphi_a(x))}
-  \end{align}
-  Here, we assumed
-  \begin{align}
-    \sum_{a = 1}^{N}g_a(x) \pdv{\lag}{\varphi_a(x)} + \sum_{a = 1}^{N}\del g_a(x)\pdv{\lag}{(\del \varphi_a(x))} = \del K^\mu[\varphi(x)], \quad ^\exists K^\mu[\varphi(x)].
-  \end{align}
-  Integrating the second term by parts, we get 
-  \begin{align}
-    \delta_{\varepsilon(x)} S[\varphi] = \intst \varepsilon(x) \del K^\mu(x) - \intst \varepsilon(x) \del \qty{ g_a(x)\pdv{\lag}{(\del \varphi_a(x))}}
-    = - \intst \varepsilon(x) \del j^\mu(x).
-  \end{align}
-  Now, we move on to the proof of the relation in consider. We start from the trivial relation
-  \begin{align}
-    \fidim \varphi_{a_1}(x_1) \cdots \varphi_{a_n}(x_n) e^{iS[\varphi]}
-    = \int \qty(\prod_{a = 1}^{N} \mathscr{D}\varphi'_a)\, \varphi'_{a_1}(x_1) \cdots \varphi'_{a_n}(x_n) e^{iS[\varphi]}.
-  \end{align}
-  Here, we perform the change of variable $\varphi'_a(x) = \varphi_a(x) + \varepsilon(x) g_a(x)$ and we get
-  \begin{align}
-    \fidim \varphi_{a_1}(x_1) \cdots \varphi_{a_n}(x_n) e^{iS[\varphi]}
-    &= \fidim \varphi_{a_1}(x_1) \cdots \varphi_{a_n}(x_n) e^{iS[\varphi]} \notag \\
-    &\quad + i\fidim \varphi_{a_1}(x_1) \cdots \varphi_{a_n}(x_n) \qty{- \intst \varepsilon(x) \del j^\mu(x)}e^{iS[\varphi]} \notag \\
-    &\quad + \sum_{i = 1}^{n} \fidim \varphi_{a_1}(x_1) \cdots \varepsilon(x_i) g_{a_i}(x_i) \cdots \varphi_{a_n}(x_n)e^{iS[\varphi]},
-  \end{align}
-  which leads us to
-  \begin{align}
-    &-i\fidim \varphi_{a_1}(x_1) \cdots \varphi_{a_n}(x_n) \qty{\intst \varepsilon(x) \del j^\mu(x)}e^{iS[\varphi]} \notag \\
-    & \quad\quad\quad\quad = \sum_{i = 1}^{n} \fidim \varphi_{a_1}(x_1) \cdots \varepsilon(x_i) g_{a_i}(x_i) \cdots \varphi_{a_n}(x_n)e^{iS[\varphi]} = 0.
-  \end{align}
-  Now, we substitute $\varepsilon(x_i)$ in RHS with a trivial relation ${\displaystyle \varepsilon(x_i) = \intst \varepsilon(x) \delta^{(D)}(x - x_i)}$, we get
-  \begin{align}
-    &-i\intst \varepsilon(x) \fidim \varphi_{a_1}(x_1) \cdots \varphi_{a_n}(x_n) \qty{\del j^\mu(x)}e^{iS[\varphi]} \notag\\
-    & \quad\quad\quad\quad = \intst \varepsilon(x) \sum_{i = 1}^{n} \fidim \varphi_{a_1}(x_1) \cdots \delta^{(D)}(x - x_i) g_{a_i}(x_i) \cdots \varphi_{a_n}(x_n)e^{iS[\varphi]},
-      \quad ^\forall \varepsilon(x).
-  \end{align}
-  Then we get
-  \begin{align}
-    i\fidim \varphi_{a_1}(x_1) \cdots \varphi_{a_n}(x_n) \qty{\del j^\mu(x)}e^{iS[\varphi]}
-    = \sum_{i = 1}^{n} \fidim \varphi_{a_1}(x_1) \cdots \delta^{(D)}(x - x_i) g_{a_i}(x_i) \cdots \varphi_{a_n}(x_n)e^{iS[\varphi]},
-  \end{align}
-  which means that
-  \begin{align}
-    \ev{\varphi_{a_1}(x_1) \cdots \varphi_{a_n}(x_n) \qty{\del j^\mu(x)}} = -i\sum_{i = 0}^{n}\ev{\varphi_{a_1}(x_1) \cdots \delta^{(D)}(x - x_i) g_{a_i}(x_i) \cdots \varphi_{a_n}(x_n)}.
-    \label{corr-conv-law}
-  \end{align}
-\end{proof}
-
-\subsubsection{Reformulation in the language of differential forms}
-\begin{factph}
-  Mathematically speaking, Noether current $j^\mu(x)$ are coefficients of a vector field on the spacetime manifold $\mathscr{M}$, which is a section of the tangent bundle $T\mathscr{M}$. And equivaletly $j_\mu(x)$ are coefficients of a covector field of a section of the cotangent bundle $T^*\mathscr{M}$. Let us stick to the representation on cotangent bundle in this notes, then we can write
-  \begin{align}
-    j = j_\mu(x) \dd x^\mu.
-  \end{align}
-  And obviously, we have the Hodge dual of it.
-  \begin{align}
-    *j = \frac{1}{(D - 1)!}j_{\mu_0}(x) \tensor{\epsilon}{^{\mu_0}_{\mu_1\cdots\mu_{D-1}}} \dd x^{\mu_1} \wedge \cdots \wedge \dd x^{\mu_{D-1}}.
-  \end{align}
-\end{factph}
-
-\begin{propositionph}
-  The conversation law $\del j^\mu(x) = 0$ can be written as
-  \begin{align}
-    \dd *j = 0.
-  \end{align}
-\end{propositionph}
-
-\begin{proof}
-  We will see the equivalence of the two representations $\del j^\mu = \partial^\mu j_\mu = 0$ and $\dd * j = 0$. We start from
-  \begin{align}
-    \dd * j
-    &= \frac{1}{(D - 1)!}\partial_\alpha j_{\mu_0}(x)
-      \tensor{\epsilon}{^{\mu_0}_{\mu_1\cdots\mu_{D-1}}} \dd x^{\alpha} \wedge \dd x^{\mu_1} \wedge \cdots \wedge \dd x^{\mu_{D-1}} = \frac{1}{(D - 1)!}\partial_\alpha j_{\mu_0}(x)
-      \tensor{\epsilon}{^{\mu_0}_{\mu_1\cdots\mu_{D-1}}}\tensor{\epsilon}{^{\alpha\mu_1\cdots\mu_{D-1}}} \notag\\
-    &= (-1)^{D-1}\partial_\alpha j_{\mu_0}(x)\eta^{{\mu_0}\alpha} \dd x^{0} \wedge \cdots \wedge \dd x^{D-1} = (-1)^{D-1}\partial^\mu j_\mu(x) \dd x^0 \wedge \cdots \dd x^{D-1}.
-  \end{align}
-  Now, if we assume $\dd * j = 0$, obviously $\partial_\mu j^\mu(x) = 0$ because $\dd x^0 \wedge \cdots \wedge \dd x^{D-1} \ne 0$. Also if we assume $\partial_\mu j^\mu(x) = 0$, obviously $\dd * j = 0$ from the relation we just derived.
-\end{proof}
-
-\begin{remark}
-  In the Euclidean theory, which we will be using so often in this note, we simply have
-  \begin{align}
-    \dd * j = \del j^\mu(x) \dd x^0 \wedge \cdots \wedge \dd x^{D-1}.
-  \end{align}
-\end{remark}
-
-\begin{propositionph}
-  The definition of Noether charge ${\displaystyle Q = \int \dd^{D-1}x \, j_0(x)}$ is translated to differential forms as follows.
-  \begin{align}
-    Q = \int_\Sigma * j, \label{noether-charge}
-  \end{align}
-  where, $\Sigma$ is the spatial submanifold of the spacetime manifold $\mathscr{M}$.
-\end{propositionph}
-
-\begin{proof}
-  We start by rewriting the integral.
-  \begin{align}
-    Q &= \int_{\Sigma} *j = \int_{\Sigma} \frac{1}{(D - 1)!}j_{\mu_0}(x) \tensor{\epsilon}{^{\mu_0}_{\mu_1\cdots\mu_{D-1}}} \dd x^{\mu_1} \wedge \cdots \wedge \dd x^{\mu_{D-1}}
-    \notag \\
-      &= \int_{\Sigma} \frac{1}{(D - 1)!}j_{\mu_0}(x) \tensor{\epsilon}{^{\mu_0}_{\mu_1\cdots\mu_{D-1}}}\tensor{\epsilon}{^{0\mu_1\cdots\mu_{D-1}}}
-        \dd x^{1} \wedge \cdots \wedge \dd x^{D-1} = \int_{\Sigma} j_{\mu_0}(x) (-1)^{D-1}\eta^{\mu_0 0} \dd x^{1} \wedge \cdots \wedge \dd x^{D-1}. \label{noether-charge}
-  \end{align}
-  Obviously, \eqref{noether-charge} $= 0$ for $\mu_0 \ne 0$. Then we have
-  \begin{align}
-    Q = Q(\Sigma) = (-1)^{D-1}  \int_{\Sigma} j_{0}(x) \, \dd x^{1} \wedge \cdots \wedge \dd x^{D-1},
-  \end{align}
-  which has the same meaning as ${\displaystyle \int \dd^{D-1}x}\, j_0(x)$.\footnote{Here, we ignore the factor $(-1)^{D-1}$ because it does not affect the physical invariant.}
-\end{proof}
-
-\begin{propositionph}
-  The conversation law in a correlation function representation is interpreted as follows.
-  \begin{align}
-    \ev{(\dd * j) \varphi_{a_1}(x_1) \cdots \varphi_{a_n}(x_n)}
-    = -i \sum_{i = 0}^{n} \ev{\varphi_{a_1}(x_1) \cdots \delta^{(D)}(x - x_i)g_{a_i}(x_i) \cdots \varphi_{a_n}(x_n)} \dd x^0 \wedge \cdots \wedge \dd x^{D-1}.
-    \label{noether-takahashi-id-df}
-  \end{align}
-\end{propositionph}
-
-\begin{proof}
-  By simply putting $\dd x^0 \wedge \cdots \wedge \dd x^{D-1}$ on both sides of \eqref{noether-takahashi-id}, we get \eqref{noether-takahashi-id-df}.
-\end{proof}
-
-\begin{definitionph}
-  We say that, in the case of conventional symmetries, the operator $\mathscr{O}(\mathscr{M})$ defined on some manifold $\mathscr{M}$ is topological if $\ev{\mathscr{O}(\mathscr{M}) \varphi(x_1) \cdots \varphi(x_n)}$ is invariant under the deformation of $\mathscr{M}$.
-\end{definitionph}
-
-\begin{propositionph}
-  We have the following relation.
-  \begin{align}
-    \ev{Q(\Sigma)\varphi_{a_1}(x_1) \cdots \varphi_{a_n}(x_n)}
-    = -i \sum_{i = 0}^{n}  \link(\Sigma, x_i)\ev{\varphi_{a_1}(x_1) \cdots g_{a_i}(x_i) \cdots \varphi_{a_n}(x_n)}, \label{noether-charge-cf}
-  \end{align}
-  where we defined the link number as
-  \begin{align}
-    \link(\Sigma, x_i) = \int_{\varOmega_{\Sigma}} \dd x^0 \wedge \cdots \dd x^{D-1} \delta^{(D)} (x - x_i), \quad \partial\varOmega_{\Sigma} = \Sigma. \label{link-number}
-  \end{align}
-\end{propositionph}
-
-\begin{proof}
-  We just integrate the both sides of \eqref{noether-takahashi-id-df} in terms of $x$ on $\varOmega_\Sigma$.
-  \begin{align}
-    \text{LHS of } \eqref{noether-takahashi-id-df} &= \int_{\varOmega_\Sigma}\ev{(\dd * j) \varphi_{a_1}(x_1) \cdots \varphi_{a_n}(x_n)} \notag\\
-                                                   &= \ev{\int_{\varOmega_\Sigma}\qty(\dd * j) \varphi_{a_1}(x_1) \cdots \varphi_{a_n}(x_n)}\overset{\text{Stokes's theorem}}{=}
-                                                     \ev{\int_{\Sigma} * j \, \varphi_{a_1}(x_1) \cdots \varphi_{a_n}(x_n)} \notag\\
-                                                   &\overset{\eqref{noether-charge}}{=} \ev{\int_{\Sigma} Q(\Sigma) \, \varphi_{a_1}(x_1) \cdots \varphi_{a_n}(x_n)} \\
-    \text{RHS of } \eqref{noether-takahashi-id-df} &= -i \sum_{i = 0}^{n} \int_{\varOmega_\Sigma} \delta^{(D)}(x - x_i)
-                                                     \ev{\varphi_{a_1}(x_1) \cdots g_{a_i}(x_i) \cdots \varphi_{a_n}(x_n)} \dd x^0 \wedge \cdots \wedge \dd x^{D-1} \notag \\
-                                                   &= -i \sum_{i = 0}^{n} \int_{\varOmega_\Sigma} \delta^{(D)}(x - x_i)
-                                                     \ev{\varphi_{a_1}(x_1) \cdots g_{a_i}(x_i) \cdots \varphi_{a_n}(x_n)} \dd x^0 \wedge \cdots \wedge \dd x^{D-1} \notag \\
-                                                   &= -i \sum_{i=0}^{n} \link(\Sigma, x_i)\ev{\varphi_{a_1}(x_1) \cdots g_{a_i}(x_i) \cdots \varphi_{a_n}(x_n)}
-  \end{align}
-  This proves the proposition.
-\end{proof}
-\begin{remark}
-  The link number \eqref{link-number} is topological under the deformation that does not cross the point $x_i$.
-\end{remark}
-
-For simplicity, we will be considering $n = 1$ case only for the present. \eqref{noether-takahashi-id-df} and \eqref{noether-charge-cf} are
+\subsection{Higher-form global symmetries}
+\subsubsection{Symmetry as topological operators}
+\begin{stmt}
+  Symmetry generators are topological operators.
+\end{stmt}
+We have Ward-Takahashi identity (in differential forms).
 \begin{align}
-  \ev{\qty{\dd * j(x)} \varphi(y)} = -i \delta^{(D)}(x - y) \ev{g(y)} \dd x^0 \wedge \cdots \wedge \dd x^{D-1}, \quad\ev{Q(\Sigma) \varphi(y)} = -i \link(\Sigma, y) \ev{g(y)}.
+  \ev{\dd \hodge j(x) \mathscr{O}(y)} = -i\delta^{(D)}(x - y)\ev{\delta \mathscr{O}(y)}.
 \end{align}
+Noether charge is defined as follows.
+\begin{align}
+  Q_\Sigma = \int_\Sigma *j(x),
+\end{align}
+where $\Sigma$ is a equal-time hypersurface on the spacetime manifold $M$.\footnote{}
+Integrating the both sides of this equation on the manifold $\varOmega$ that has the hypersurface $\Sigma$ as its boundary, we get
+\begin{align}
+  \ev{Q_\Sigma \mathscr{O}(x)} = -i \, \link(P, \varOmega) \ev{\delta \mathscr{O}(x)}, \label{WT}
+  % -i \int_\varOmega \dd x^0 \wedge \cdots \wedge \dd x^{D-1}
+  % \delta^{(D)}(x - y)\ev{\delta\mathscr{O}(y)},
+\end{align}
+where $P$ is defined as $P = \qty{(y^0, \cdots, y^{D-1})}$. We can see that $\ev{Q_\Sigma \mathscr{O}(x)}$ is toplological in the sense that it is invariant under the deformation of the manifold $\varOmega$ that does not cross the point $P$.
 
-\begin{theoremph}
-  Noether charge is topological under the deformation $\varOmega_\Sigma \mapsto \varOmega'_\Sigma = \varOmega_\Sigma \cup \varOmega_0$ such that $y$ does not belong to $\varOmega_0$. This is the topological expression of the conversation law of Noether charge.
-\end{theoremph}
-
-\begin{proof}
-  Under the defirmation $\varOmega_\Sigma \mapsto \varOmega'_\Sigma = \varOmega_\Sigma \cup \varOmega_0$, Nother charge transforms as follows.
+This formulation leads us to the following observation.
+\begin{obsv}
+  The Ward-Takahashi identity we have derived
   \begin{align}
-    \ev{Q(\Sigma + \partial \varOmega_0)\varphi(y)}= \int_{\varOmega_\Sigma \cup \varOmega_0} \ev{\qty{\dd * j(x)}\varphi(y)}
-    = \underbrace{\int_{\varOmega_\Sigma} \ev{\qty{\dd * j(x)} \varphi(y)}}_{\ev{Q(\Sigma)\varphi(y)}} + \int_{\varOmega_0} \ev{\qty{\dd * j(x)} \varphi(y)}.
+    \ev{Q_\Sigma \mathscr{O}(x)} = -i \, \link(P, \varOmega) \ev{\delta \mathscr{O}(x)}
   \end{align}
-  Here, since $\varOmega_0$ does not include the point $y$ and $\dd * j(x) = 0$, the second term vanishes. Then we get
+  provides a new perspective in generalising symmetries. We may put this relation as the starting point of the discussion of symmetries and generalising them by substituting $P, \varOmega$ with some manifolds $X, Y$ such that $\dim X + \dim Y = D$. And naturally, after the generalisation, the operator $\mathscr{O}(x)$ is not supported at a point anymore but supported on a manifold $X$.
   \begin{align}
-    \ev{Q(\Sigma + \partial \varOmega_0) \varphi(y)} = \ev{Q(\Sigma)\varphi(y)}.
+    \ev{Q_\Sigma \mathscr{O}(X)} = -i \, \link(X, Y) \ev{\delta \mathscr{O}(X)}.
   \end{align}
-  This proves the theorem.
-\end{proof}
+\end{obsv}
 
-\begin{propositionph}
-  We have the following relation.
+\subsubsection{Definition of $p$ - form symmetries}
+Now, let us put the observation as the definition of symmetries (and we call this symmetry a higher-form symmetry).
+\begin{defn}
+  We define a $p$ - form symmetry as follows. We say that there exists an $p$ - form symmetry in the system in consider if there exists an operator $Q_\Sigma$ that is supported on a $D - p - 1$ dimensional manifold $\Sigma$ and it satisfies Ward-Takahashi identity
   \begin{align}
-    \ev{U(\Sigma)\varphi(y)} = R \ev{\varphi(y)}
+    \ev{Q_\Sigma \mathscr{O}(X)} = -i \, \link(X, Y) \ev{\delta \mathscr{O}(X)}, \quad \Sigma = \partial Y.
   \end{align}
-  Here, we defined
+  We call this operator $Q_\Sigma$ a symmetry operator.
+\end{defn}
+
+\subsubsection{Exmaples of $p$ - form symmetries}
+\begin{ex}{$D = 4$ dimensional $U(1)$ gauge theory} We consider an action
   \begin{align}
-    U(\Sigma) = e^{i\epsilon Q}, \quad R = e^{i\epsilon T},
+    S[a] = -\frac{1}{2e^2} \int_{M} f \wedge *f, \quad f = \dd a,
   \end{align}
-  where $\epsilon$ is the arbitary real number and $T$ is the representation on the vector space spanned by the field $\varphi(y)$ of the generator of the symmetry we are considering.
-\end{propositionph}
-
-\begin{proof}
-  %% TODO: Write the proof.
-\end{proof}
-
-\begin{remark}
-  $Q(\Sigma)$ is the representation on the Hilbert space of the generator of the symmetry.
-\end{remark}
-
-\subsubsection{New perspective on symmetries}
-\begin{observationph}
-  It may be possible to generalise symmetries as
+  where $a$ is the $U(1)$ gauge field. Considering the trivial relation $\dd^2 = 0$ and the equation of motion, we get
   \begin{align}
-    \text{symmetry generator} = \text{topological operator}.
+    \dd \hodge f = 0, \quad \dd f = 0.
   \end{align}
-\end{observationph}
-\subsection{Definition of higher-form symmetries}
-Most parts of this section are adopted from the materials below.
-\begin{enumerate}
-\item [\cite{Gomes:2023ahz}] P.~R.~S.~Gomes,
-``An introduction to higher-form symmetries''
-\end{enumerate}
 
-\subsubsection{Higher gauge theory}
+  Now, let us define new operators as follows.
+  \begin{align}
+    Q^{(\mathrm{e})}_\Sigma = \int_\Sigma *f, \quad Q^{(\mathrm{m})}_\Sigma = \int_\Sigma f.
+  \end{align}
+  Let us stick to $Q^{(\mathrm{e})}_\Sigma$ for a while. We first prove that $Q^{(\mathrm{e})}_\Sigma$ is a symmetry operator. 
+\end{ex}
+
 
 \section{Applications}
-\subsection{Ginzburg-Landau theory *}
+% \section{Foundations}
+% \subsection{Conventional symmetries *}
+% Most parts of this section are adopted from the matirials below.
+% \begin{enumerate}
+% \item [\cite{Peskin:1995ev}]
+% M.~E.~Peskin and D.~V.~Schroeder,
+% ``An Introduction to quantum field theory''
+% \item [\cite{Srednicki:2007qs}]
+% M.~Srednicki,
+% ``Quantum field theory''
+% \item [\cite{Gomes:2023ahz}]
+% P.~R.~S.~Gomes,
+% ``An introduction to higher-form symmetries'', Section 3
+% \end{enumerate}
 
-\nocite{*}
-% \bibliographystyle{plain}
-% \bibliography{refs}
+% \subsubsection{Schwinger-Dyson equation \& conversation laws}
+% \begin{propositionph}
+%   We have the following relation, which is well-known as Schwinger-Dyson equation.
+%   \begin{align}
+%     \ev{\frac{\partial S[\varphi]}{\partial \varphi(x)} \varphi(x_1) \cdots \varphi(x_n)} = i \sum_{i = 1}^{n} \ev{\varphi(x_1) \cdots \delta^{(D)}(x - x_i) \cdots \varphi(x_n)}.
+%   \end{align}  
+% \end{propositionph}
+% \begin{proof}
+%   First of all, we prove the general relation
+%   \begin{align}
+%     \int \mathscr{D} \varphi \, \frac{\delta}{\delta \varphi(x)} \qty(F[\varphi] e^{iS[\varphi]}) = 0.
+%   \end{align}
+%   We start from the obvious relation
+%   \begin{align}
+%     \int \mathscr{D} \varphi \, F[\varphi] e^{iS[\varphi]} = \int \mathscr{D} \varphi' \, F[\varphi'] e^{iS[\varphi']},
+%   \end{align}
+%   which is just a renaming of a dummy variable of the integration. Now we perform a change of variables $\varphi'(x) \mapsto \varphi(x) + \varepsilon(x)$. Then we have
+%   \begin{align}
+%     \int \mathscr{D}\varphi \, F[\varphi] e^{iS[\varphi]}
+%     &= \fivarphi F[\varphi + \varepsilon]e^{iS[\varphi + \varepsilon]} \notag \\
+%     &= \fivarphi \qty{F[\varphi] + \intst \frac{\delta F[\varphi]}{\delta \varphi(x)} \varepsilon(x)}
+%       \exp\qty{iS[\varphi] + i \intst \frac{\delta S[\varphi]}{\delta \varphi(x)} \varepsilon(x)} \notag \\
+%     &= \fivarphi \qty{F[\varphi] + \intst \frac{\delta F[\varphi]}{\delta \varphi(x)} \varepsilon(x)}
+%       \qty{1 + i\intst \frac{\delta S[\varphi]}{\delta \varphi(x)}\varepsilon(x)}e^{iS[\varphi]} \notag \\
+%     &= \fivarphi F[\varphi] e^{iS[\varphi]} + \fivarphi \intst
+%       \qty{\frac{\delta F[\varphi]}{\delta\varphi(x)} e^{iS[\varphi]} + F[\varphi] i\frac{\delta S[\varphi]}{\delta \varphi(x)} e^{iS[\varphi]}}\varepsilon(x),
+%       \quad ^\forall \varepsilon(x),
+%   \end{align}
+%   which leads us to the identity
+%   \begin{align}
+%     \fivarphi \qty{\frac{\delta F[\varphi]}{\delta\varphi(x)} e^{iS[\varphi]} + F[\varphi] i\frac{\delta S[\varphi]}{\delta \varphi(x)} e^{iS[\varphi]}} = 0.
+%   \end{align}
+%   Now, by substituting $F[\varphi]$ with $\varphi(x_1) \cdots \varphi(x_n)$ we get
+%   \begin{align}
+%     i\fivarphi \frac{\delta S[\varphi]}{\delta\varphi(x)}  \varphi(x_1) \cdots \varphi(x_n) e^{iS[\varphi]}
+%     = - \sum_{i = 1}^{n} \fivarphi \varphi(x_1) \cdots \delta^{(D)}(x - x_i) \cdots \varphi(x_n) e^{iS[\varphi]},
+%   \end{align}
+%   which we simply denote
+%   \begin{align}
+%     \ev{\frac{\delta S[\varphi]}{\delta\varphi(x)}  \varphi(x_1) \cdots \varphi(x_n)}
+%     = i \sum_{i = 1}^{n} \ev{\varphi(x_1) \cdots \delta^{(D)}(x - x_i) \cdots \varphi(x_n)}.
+%   \end{align}
+% \end{proof}
 
-\begin{thebibliography}{99}
-%\cite{Peskin:1995ev}
-\bibitem{Peskin:1995ev}
-M.~E.~Peskin and D.~V.~Schroeder,
-%``An Introduction to quantum field theory,''
-Addison-Wesley, 1995,
-ISBN 978-0-201-50397-5, 978-0-429-50355-9, 978-0-429-49417-8
-doi:10.1201/9780429503559
-%1928 citations counted in INSPIRE as of 17 Sep 2025
+% \begin{remark}
+%   Schwinger-Dyson equation is the generalisation of Ward-Takahashi identity.
+% \end{remark}
 
-%\cite{Srednicki:2007qs}
-\bibitem{Srednicki:2007qs}
-M.~Srednicki,
-%``Quantum field theory,''
-Cambridge University Press, 2007,
-ISBN 978-0-521-86449-7, 978-0-511-26720-8
-doi:10.1017/CBO9780511813917
+% \begin{propositionph}
+%   We have following relation, which is a correlation function representation of the conversation law of Noether current.
+%   \begin{align}
+%     \ev{\qty{\del j^\mu(x)} \varphi_{a_1}(x_1) \cdots \varphi_{a_n}(x_n)}
+%     = -i\sum_{i = 0}^{n} \ev{\varphi_{a_1}(x_1) \cdots \delta^{(D)}(x - x_i) \delta \varphi_{a_i}(x_i) \cdots \varphi_{a_n}(x_n)}. \label{noether-takahashi-id}
+%   \end{align}
+% \end{propositionph}
+% \begin{proof}
+%   Now, we consider the transformation
+%   \begin{align}
+%     \varphi_a(x) \mapsto \varphi_a'(x) = \varphi_a(x) + \delta_{\varepsilon(x)} \varphi_a(x) = \varphi_a(x) + \varepsilon(x) g_a(x).
+%   \end{align}
+%   We first prove the relation
+%   \begin{align}
+%     \delta_{\varepsilon(x)} S[\varphi] = - \intst \varepsilon(x) \del \qty{\sum_{a = 1}^{N} g_a(x) \frac{\partial \lag}{\partial(\partial_\mu \varphi_a(x))} - K^\mu[\varphi]}
+%     = - \intst \varepsilon(x) \del j^\mu(x)
+%   \end{align}
+%   where we defined $j^\mu(x)$ as
+%   \begin{align}
+%     j^\mu(x) = \sum_{a = 1}^{N} g_a(x) \frac{\partial \lag}{\partial(\partial_\mu \varphi_a(x))} - K^\mu[\varphi].
+%   \end{align}
+%   The direct calculation of $\delta_{\varepsilon(x)} S[\varphi]$ is as follows.
+%   \begin{align}
+%     \delta_{\varepsilon(x)} S[\varphi]
+%     &= \intst \delta_{\varepsilon(x)} \lag[\varphi, \del \varphi]
+%      = \intst \qty{\lag[\varphi(x) + \varepsilon(x)\varphi(x), \del \qty{\varphi(x) + \varepsilon(x)g(x)}] - \lag[\varphi(x), \del \varphi(x)]} \notag \\
+%     &= \intst \qty{\lag[\varphi(x) + \varepsilon(x)\varphi(x), \del \varphi(x) + \del \varepsilon(x) g(x) + \varepsilon(x) \del g(x)] - \lag[\varphi(x), \del \varphi(x)]} \notag \\
+%     &= \intst \qty{\varepsilon(x)\sum_{a = 1}^{N}g_a(x) \pdv{\lag}{\varphi_a(x)} + \varepsilon(x)\sum_{a = 1}^{N}\del g_a(x)\pdv{\lag}{(\del \varphi_a(x))}
+%       + \del \varepsilon(x) \sum_{a = 1}^{N} g_a(x) \pdv{\lag}{(\del\varphi_a(x))}} \notag \\
+%     &= \intst \varepsilon(x) \del K^\mu(x) + \intst \del \varepsilon(x) \sum_{a = 1}^{N} g_a(x) \pdv{\lag}{(\del\varphi_a(x))}
+%   \end{align}
+%   Here, we assumed
+%   \begin{align}
+%     \sum_{a = 1}^{N}g_a(x) \pdv{\lag}{\varphi_a(x)} + \sum_{a = 1}^{N}\del g_a(x)\pdv{\lag}{(\del \varphi_a(x))} = \del K^\mu[\varphi(x)], \quad ^\exists K^\mu[\varphi(x)].
+%   \end{align}
+%   Integrating the second term by parts, we get 
+%   \begin{align}
+%     \delta_{\varepsilon(x)} S[\varphi] = \intst \varepsilon(x) \del K^\mu(x) - \intst \varepsilon(x) \del \qty{ g_a(x)\pdv{\lag}{(\del \varphi_a(x))}}
+%     = - \intst \varepsilon(x) \del j^\mu(x).
+%   \end{align}
+%   Now, we move on to the proof of the relation in consider. We start from the trivial relation
+%   \begin{align}
+%     \fidim \varphi_{a_1}(x_1) \cdots \varphi_{a_n}(x_n) e^{iS[\varphi]}
+%     = \int \qty(\prod_{a = 1}^{N} \mathscr{D}\varphi'_a)\, \varphi'_{a_1}(x_1) \cdots \varphi'_{a_n}(x_n) e^{iS[\varphi]}.
+%   \end{align}
+%   Here, we perform the change of variable $\varphi'_a(x) = \varphi_a(x) + \varepsilon(x) g_a(x)$ and we get
+%   \begin{align}
+%     \fidim \varphi_{a_1}(x_1) \cdots \varphi_{a_n}(x_n) e^{iS[\varphi]}
+%     &= \fidim \varphi_{a_1}(x_1) \cdots \varphi_{a_n}(x_n) e^{iS[\varphi]} \notag \\
+%     &\quad + i\fidim \varphi_{a_1}(x_1) \cdots \varphi_{a_n}(x_n) \qty{- \intst \varepsilon(x) \del j^\mu(x)}e^{iS[\varphi]} \notag \\
+%     &\quad + \sum_{i = 1}^{n} \fidim \varphi_{a_1}(x_1) \cdots \varepsilon(x_i) g_{a_i}(x_i) \cdots \varphi_{a_n}(x_n)e^{iS[\varphi]},
+%   \end{align}
+%   which leads us to
+%   \begin{align}
+%     &-i\fidim \varphi_{a_1}(x_1) \cdots \varphi_{a_n}(x_n) \qty{\intst \varepsilon(x) \del j^\mu(x)}e^{iS[\varphi]} \notag \\
+%     & \quad\quad\quad\quad = \sum_{i = 1}^{n} \fidim \varphi_{a_1}(x_1) \cdots \varepsilon(x_i) g_{a_i}(x_i) \cdots \varphi_{a_n}(x_n)e^{iS[\varphi]} = 0.
+%   \end{align}
+%   Now, we substitute $\varepsilon(x_i)$ in RHS with a trivial relation ${\displaystyle \varepsilon(x_i) = \intst \varepsilon(x) \delta^{(D)}(x - x_i)}$, we get
+%   \begin{align}
+%     &-i\intst \varepsilon(x) \fidim \varphi_{a_1}(x_1) \cdots \varphi_{a_n}(x_n) \qty{\del j^\mu(x)}e^{iS[\varphi]} \notag\\
+%     & \quad\quad\quad\quad = \intst \varepsilon(x) \sum_{i = 1}^{n} \fidim \varphi_{a_1}(x_1) \cdots \delta^{(D)}(x - x_i) g_{a_i}(x_i) \cdots \varphi_{a_n}(x_n)e^{iS[\varphi]},
+%       \quad ^\forall \varepsilon(x).
+%   \end{align}
+%   Then we get
+%   \begin{align}
+%     i\fidim \varphi_{a_1}(x_1) \cdots \varphi_{a_n}(x_n) \qty{\del j^\mu(x)}e^{iS[\varphi]}
+%     = \sum_{i = 1}^{n} \fidim \varphi_{a_1}(x_1) \cdots \delta^{(D)}(x - x_i) g_{a_i}(x_i) \cdots \varphi_{a_n}(x_n)e^{iS[\varphi]},
+%   \end{align}
+%   which means that
+%   \begin{align}
+%     \ev{\varphi_{a_1}(x_1) \cdots \varphi_{a_n}(x_n) \qty{\del j^\mu(x)}} = -i\sum_{i = 0}^{n}\ev{\varphi_{a_1}(x_1) \cdots \delta^{(D)}(x - x_i) g_{a_i}(x_i) \cdots \varphi_{a_n}(x_n)}.
+%     \label{corr-conv-law}
+%   \end{align}
+% \end{proof}
+
+% \subsubsection{Reformulation in the language of differential forms}
+% \begin{factph}
+%   Mathematically speaking, Noether current $j^\mu(x)$ are coefficients of a vector field on the spacetime manifold $\mathscr{M}$, which is a section of the tangent bundle $T\mathscr{M}$. And equivaletly $j_\mu(x)$ are coefficients of a covector field of a section of the cotangent bundle $T^*\mathscr{M}$. Let us stick to the representation on cotangent bundle in this notes, then we can write
+%   \begin{align}
+%     j = j_\mu(x) \dd x^\mu.
+%   \end{align}
+%   And obviously, we have the Hodge dual of it.
+%   \begin{align}
+%     *j = \frac{1}{(D - 1)!}j_{\mu_0}(x) \tensor{\epsilon}{^{\mu_0}_{\mu_1\cdots\mu_{D-1}}} \dd x^{\mu_1} \wedge \cdots \wedge \dd x^{\mu_{D-1}}.
+%   \end{align}
+% \end{factph}
+
+% \begin{propositionph}
+%   The conversation law $\del j^\mu(x) = 0$ can be written as
+%   \begin{align}
+%     \dd *j = 0.
+%   \end{align}
+% \end{propositionph}
+
+% \begin{proof}
+%   We will see the equivalence of the two representations $\del j^\mu = \partial^\mu j_\mu = 0$ and $\dd * j = 0$. We start from
+%   \begin{align}
+%     \dd * j
+%     &= \frac{1}{(D - 1)!}\partial_\alpha j_{\mu_0}(x)
+%       \tensor{\epsilon}{^{\mu_0}_{\mu_1\cdots\mu_{D-1}}} \dd x^{\alpha} \wedge \dd x^{\mu_1} \wedge \cdots \wedge \dd x^{\mu_{D-1}} = \frac{1}{(D - 1)!}\partial_\alpha j_{\mu_0}(x)
+%       \tensor{\epsilon}{^{\mu_0}_{\mu_1\cdots\mu_{D-1}}}\tensor{\epsilon}{^{\alpha\mu_1\cdots\mu_{D-1}}} \notag\\
+%     &= (-1)^{D-1}\partial_\alpha j_{\mu_0}(x)\eta^{{\mu_0}\alpha} \dd x^{0} \wedge \cdots \wedge \dd x^{D-1} = (-1)^{D-1}\partial^\mu j_\mu(x) \dd x^0 \wedge \cdots \dd x^{D-1}.
+%   \end{align}
+%   Now, if we assume $\dd * j = 0$, obviously $\partial_\mu j^\mu(x) = 0$ because $\dd x^0 \wedge \cdots \wedge \dd x^{D-1} \ne 0$. Also if we assume $\partial_\mu j^\mu(x) = 0$, obviously $\dd * j = 0$ from the relation we just derived.
+% \end{proof}
+
+% \begin{remark}
+%   In the Euclidean theory, which we will be using so often in this note, we simply have
+%   \begin{align}
+%     \dd * j = \del j^\mu(x) \dd x^0 \wedge \cdots \wedge \dd x^{D-1}.
+%   \end{align}
+% \end{remark}
+
+% \begin{propositionph}
+%   The definition of Noether charge ${\displaystyle Q = \int \dd^{D-1}x \, j_0(x)}$ is translated to differential forms as follows.
+%   \begin{align}
+%     Q = \int_\Sigma * j, \label{noether-charge}
+%   \end{align}
+%   where, $\Sigma$ is the spatial submanifold of the spacetime manifold $\mathscr{M}$.
+% \end{propositionph}
+
+% \begin{proof}
+%   We start by rewriting the integral.
+%   \begin{align}
+%     Q &= \int_{\Sigma} *j = \int_{\Sigma} \frac{1}{(D - 1)!}j_{\mu_0}(x) \tensor{\epsilon}{^{\mu_0}_{\mu_1\cdots\mu_{D-1}}} \dd x^{\mu_1} \wedge \cdots \wedge \dd x^{\mu_{D-1}}
+%     \notag \\
+%       &= \int_{\Sigma} \frac{1}{(D - 1)!}j_{\mu_0}(x) \tensor{\epsilon}{^{\mu_0}_{\mu_1\cdots\mu_{D-1}}}\tensor{\epsilon}{^{0\mu_1\cdots\mu_{D-1}}}
+%         \dd x^{1} \wedge \cdots \wedge \dd x^{D-1} = \int_{\Sigma} j_{\mu_0}(x) (-1)^{D-1}\eta^{\mu_0 0} \dd x^{1} \wedge \cdots \wedge \dd x^{D-1}. \label{noether-charge}
+%   \end{align}
+%   Obviously, \eqref{noether-charge} $= 0$ for $\mu_0 \ne 0$. Then we have
+%   \begin{align}
+%     Q = Q(\Sigma) = (-1)^{D-1}  \int_{\Sigma} j_{0}(x) \, \dd x^{1} \wedge \cdots \wedge \dd x^{D-1},
+%   \end{align}
+%   which has the same meaning as ${\displaystyle \int \dd^{D-1}x}\, j_0(x)$.\footnote{Here, we ignore the factor $(-1)^{D-1}$ because it does not affect the physical invariant.}
+% \end{proof}
+
+% \begin{propositionph}
+%   The conversation law in a correlation function representation is interpreted as follows.
+%   \begin{align}
+%     \ev{(\dd * j) \varphi_{a_1}(x_1) \cdots \varphi_{a_n}(x_n)}
+%     = -i \sum_{i = 0}^{n} \ev{\varphi_{a_1}(x_1) \cdots \delta^{(D)}(x - x_i)g_{a_i}(x_i) \cdots \varphi_{a_n}(x_n)} \dd x^0 \wedge \cdots \wedge \dd x^{D-1}.
+%     \label{noether-takahashi-id-df}
+%   \end{align}
+% \end{propositionph}
+
+% \begin{proof}
+%   By simply putting $\dd x^0 \wedge \cdots \wedge \dd x^{D-1}$ on both sides of \eqref{noether-takahashi-id}, we get \eqref{noether-takahashi-id-df}.
+% \end{proof}
+
+% \begin{definitionph}
+%   We say that, in the case of conventional symmetries, the operator $\mathscr{O}(\mathscr{M})$ defined on some manifold $\mathscr{M}$ is topological if $\ev{\mathscr{O}(\mathscr{M}) \varphi(x_1) \cdots \varphi(x_n)}$ is invariant under the deformation of $\mathscr{M}$.
+% \end{definitionph}
+
+% \begin{propositionph}
+%   We have the following relation.
+%   \begin{align}
+%     \ev{Q(\Sigma)\varphi_{a_1}(x_1) \cdots \varphi_{a_n}(x_n)}
+%     = -i \sum_{i = 0}^{n}  \link(\Sigma, x_i)\ev{\varphi_{a_1}(x_1) \cdots g_{a_i}(x_i) \cdots \varphi_{a_n}(x_n)}, \label{noether-charge-cf}
+%   \end{align}
+%   where we defined the link number as
+%   \begin{align}
+%     \link(\Sigma, x_i) = \int_{\varOmega_{\Sigma}} \dd x^0 \wedge \cdots \dd x^{D-1} \delta^{(D)} (x - x_i), \quad \partial\varOmega_{\Sigma} = \Sigma. \label{link-number}
+%   \end{align}
+% \end{propositionph}
+
+% \begin{proof}
+%   We just integrate the both sides of \eqref{noether-takahashi-id-df} in terms of $x$ on $\varOmega_\Sigma$.
+%   \begin{align}
+%     \text{LHS of } \eqref{noether-takahashi-id-df} &= \int_{\varOmega_\Sigma}\ev{(\dd * j) \varphi_{a_1}(x_1) \cdots \varphi_{a_n}(x_n)} \notag\\
+%                                                    &= \ev{\int_{\varOmega_\Sigma}\qty(\dd * j) \varphi_{a_1}(x_1) \cdots \varphi_{a_n}(x_n)}\overset{\text{Stokes's theorem}}{=}
+%                                                      \ev{\int_{\Sigma} * j \, \varphi_{a_1}(x_1) \cdots \varphi_{a_n}(x_n)} \notag\\
+%                                                    &\overset{\eqref{noether-charge}}{=} \ev{\int_{\Sigma} Q(\Sigma) \, \varphi_{a_1}(x_1) \cdots \varphi_{a_n}(x_n)} \\
+%     \text{RHS of } \eqref{noether-takahashi-id-df} &= -i \sum_{i = 0}^{n} \int_{\varOmega_\Sigma} \delta^{(D)}(x - x_i)
+%                                                      \ev{\varphi_{a_1}(x_1) \cdots g_{a_i}(x_i) \cdots \varphi_{a_n}(x_n)} \dd x^0 \wedge \cdots \wedge \dd x^{D-1} \notag \\
+%                                                    &= -i \sum_{i = 0}^{n} \int_{\varOmega_\Sigma} \delta^{(D)}(x - x_i)
+%                                                      \ev{\varphi_{a_1}(x_1) \cdots g_{a_i}(x_i) \cdots \varphi_{a_n}(x_n)} \dd x^0 \wedge \cdots \wedge \dd x^{D-1} \notag \\
+%                                                    &= -i \sum_{i=0}^{n} \link(\Sigma, x_i)\ev{\varphi_{a_1}(x_1) \cdots g_{a_i}(x_i) \cdots \varphi_{a_n}(x_n)}
+%   \end{align}
+%   This proves the proposition.
+% \end{proof}
+% \begin{remark}
+%   The link number \eqref{link-number} is topological under the deformation that does not cross the point $x_i$.
+% \end{remark}
+
+% For simplicity, we will be considering $n = 1$ case only for the present. \eqref{noether-takahashi-id-df} and \eqref{noether-charge-cf} are
+% \begin{align}
+%   \ev{\qty{\dd * j(x)} \varphi(y)} = -i \delta^{(D)}(x - y) \ev{g(y)} \dd x^0 \wedge \cdots \wedge \dd x^{D-1}, \quad\ev{Q(\Sigma) \varphi(y)} = -i \link(\Sigma, y) \ev{g(y)}.
+% \end{align}
+
+% \begin{theoremph}
+%   Noether charge is topological under the deformation $\varOmega_\Sigma \mapsto \varOmega'_\Sigma = \varOmega_\Sigma \cup \varOmega_0$ such that $y$ does not belong to $\varOmega_0$. This is the topological expression of the conversation law of Noether charge.
+% \end{theoremph}
+
+% \begin{proof}
+%   Under the defirmation $\varOmega_\Sigma \mapsto \varOmega'_\Sigma = \varOmega_\Sigma \cup \varOmega_0$, Nother charge transforms as follows.
+%   \begin{align}
+%     \ev{Q(\Sigma + \partial \varOmega_0)\varphi(y)}= \int_{\varOmega_\Sigma \cup \varOmega_0} \ev{\qty{\dd * j(x)}\varphi(y)}
+%     = \underbrace{\int_{\varOmega_\Sigma} \ev{\qty{\dd * j(x)} \varphi(y)}}_{\ev{Q(\Sigma)\varphi(y)}} + \int_{\varOmega_0} \ev{\qty{\dd * j(x)} \varphi(y)}.
+%   \end{align}
+%   Here, since $\varOmega_0$ does not include the point $y$ and $\dd * j(x) = 0$, the second term vanishes. Then we get
+%   \begin{align}
+%     \ev{Q(\Sigma + \partial \varOmega_0) \varphi(y)} = \ev{Q(\Sigma)\varphi(y)}.
+%   \end{align}
+%   This proves the theorem.
+% \end{proof}
+
+% \begin{propositionph}
+%   We have the following relation.
+%   \begin{align}
+%     \ev{U(\Sigma)\varphi(y)} = R \ev{\varphi(y)}
+%   \end{align}
+%   Here, we defined
+%   \begin{align}
+%     U(\Sigma) = e^{i\epsilon Q}, \quad R = e^{i\epsilon T},
+%   \end{align}
+%   where $\epsilon$ is the arbitary real number and $T$ is the representation on the vector space spanned by the field $\varphi(y)$ of the generator of the symmetry we are considering.
+% \end{propositionph}
+
+% \begin{proof}
+%   %% TODO: Write the proof.
+% \end{proof}
+
+% \begin{remark}
+%   $Q(\Sigma)$ is the representation on the Hilbert space of the generator of the symmetry.
+% \end{remark}
+
+% \subsubsection{New perspective on symmetries}
+% \begin{observationph}
+%   It may be possible to generalise symmetries as
+%   \begin{align}
+%     \text{symmetry generator} = \text{topological operator}.
+%   \end{align}
+% \end{observationph}
+% \subsection{Definition of higher-form symmetries}
+% Most parts of this section are adopted from the materials below.
+% \begin{enumerate}
+% \item [\cite{Gomes:2023ahz}] P.~R.~S.~Gomes,
+% ``An introduction to higher-form symmetries''
+% \end{enumerate}
+
+% \subsubsection{Higher gauge theory}
+
+% \section{Applications}
+% \subsection{Ginzburg-Landau theory *}
+
+% \nocite{*}
+% % \bibliographystyle{plain}
+% % \bibliography{refs}
+
+% \begin{thebibliography}{99}
+% %\cite{Peskin:1995ev}
+% \bibitem{Peskin:1995ev}
+% M.~E.~Peskin and D.~V.~Schroeder,
+% %``An Introduction to quantum field theory,''
+% Addison-Wesley, 1995,
+% ISBN 978-0-201-50397-5, 978-0-429-50355-9, 978-0-429-49417-8
+% doi:10.1201/9780429503559
+% %1928 citations counted in INSPIRE as of 17 Sep 2025
+
+% %\cite{Srednicki:2007qs}
+% \bibitem{Srednicki:2007qs}
+% M.~Srednicki,
+% %``Quantum field theory,''
+% Cambridge University Press, 2007,
+% ISBN 978-0-521-86449-7, 978-0-511-26720-8
+% doi:10.1017/CBO9780511813917
 % 311 citations counted in INSPIRE as of 17 Sep 2025
 
-%\cite{Gomes:2023ahz}
-\bibitem{Gomes:2023ahz}
-P.~R.~S.~Gomes,
-%``An introduction to higher-form symmetries,''
-SciPost Phys. Lect. Notes \textbf{74} (2023), 1
-doi:10.21468/SciPostPhysLectNotes.74
-[arXiv:2303.01817 [hep-th]].
-% 115 citations counted in INSPIRE as of 17 Sep 2025
+% %\cite{Gomes:2023ahz}
+% \bibitem{Gomes:2023ahz}
+% P.~R.~S.~Gomes,
+% %``An introduction to higher-form symmetries,''
+% SciPost Phys. Lect. Notes \textbf{74} (2023), 1
+% doi:10.21468/SciPostPhysLectNotes.74
+% [arXiv:2303.01817 [hep-th]].
+% % 115 citations counted in INSPIRE as of 17 Sep 2025
 
 
-\end{thebibliography}
+%% \end{thebibliography}
 \end{document}
